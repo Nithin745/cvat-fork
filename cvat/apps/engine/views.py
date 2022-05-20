@@ -932,7 +932,7 @@ class JobViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
     queryset = Job.objects.all()
     iam_organization_field = 'segment__task__organization'
     search_fields = ('task_name', 'project_name', 'assignee', 'state', 'stage')
-    filter_fields = list(search_fields) + ['id', 'task_id', 'project_id', 'updated_date']
+    filter_fields = list(search_fields) + ['id', 'task_id', 'project_id', 'updated_date', 'task_created_date']
     ordering_fields = filter_fields
     ordering = "-id"
     lookup_fields = {
@@ -942,7 +942,8 @@ class JobViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
         'task_name': 'segment__task__name',
         'project_name': 'segment__task__project__name',
         'updated_date': 'segment__task__updated_date',
-        'assignee': 'assignee__username'
+        'assignee': 'assignee__username',
+        'task_created_date': 'segment__task__created_date'
     }
 
     def get_queryset(self):

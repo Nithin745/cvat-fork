@@ -419,6 +419,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
     assignee_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
     project_id = serializers.IntegerField(required=False, allow_null=True)
     dimension = serializers.CharField(allow_blank=True, required=False)
+    path = serializers.ReadOnlyField(source='data.video.path')
 
     class Meta:
         model = models.Task
@@ -426,12 +427,13 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
             'owner_id', 'assignee_id', 'bug_tracker', 'created_date', 'updated_date',
             'overlap', 'segment_size', 'status', 'labels', 'segments',
             'data_chunk_size', 'data_compressed_chunk_type', 'data_original_chunk_type',
-            'size', 'image_quality', 'data', 'dimension', 'subset', 'organization')
+            'size', 'image_quality', 'data', 'dimension', 'subset', 'organization', 'path')
         read_only_fields = ('mode', 'created_date', 'updated_date', 'status',
             'data_chunk_size', 'owner', 'assignee', 'data_compressed_chunk_type',
             'data_original_chunk_type', 'size', 'image_quality', 'data',
-            'organization')
+            'organization', 'path')
         write_once_fields = ('overlap', 'segment_size', 'project_id')
+
 
     # pylint: disable=no-self-use
     def create(self, validated_data):
@@ -584,14 +586,34 @@ class ProjectSerializer(serializers.ModelSerializer):
     assignee_id = serializers.IntegerField(write_only=True, allow_null=True, required=False)
     task_subsets = serializers.ListField(child=serializers.CharField(), required=False)
     dimension = serializers.CharField(max_length=16, required=False, read_only=True)
+    next_task = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Project
         fields = ('url', 'id', 'name', 'labels', 'tasks', 'owner', 'assignee',
             'owner_id', 'assignee_id', 'bug_tracker', 'task_subsets',
-            'created_date', 'updated_date', 'status', 'dimension', 'organization')
+            'created_date', 'updated_date', 'status', 'dimension', 'organization', 'next_task')
         read_only_fields = ('created_date', 'updated_date', 'status', 'owner',
-            'assignee', 'task_subsets', 'dimension', 'organization', 'tasks')
+            'assignee', 'task_subsets', 'dimension', 'organization', 'tasks', 'next_task')
+
+    def get_next_task(self, obj):
+        request = self.context.get('request', None)
+        task = None
+        if request.GET:
+            print(f"current task_id: {obj.id}")
+            current_task_id = request.GET.get('task_id', None)
+            if not current_task_id:
+                return None
+            task_obj = models.Task.objects.filter(
+                id__gt=current_task_id, project_id=obj.id).order_by('id').first()
+            if not task_obj:
+                return None
+            task = TaskSerializer(task_obj, context=self.context).data
+            task = task.pop('segments')
+        else:
+            return None
+
+        return task
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
