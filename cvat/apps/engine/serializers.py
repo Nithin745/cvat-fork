@@ -600,7 +600,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         request = self.context.get('request', None)
         task = None
         if request.GET:
-            print(f"current task_id: {obj.id}")
             current_task_id = request.GET.get('task_id', None)
             if not current_task_id:
                 return None

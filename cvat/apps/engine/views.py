@@ -566,6 +566,12 @@ class TaskViewSet(UploadMixin, viewsets.ModelViewSet):
     filter_fields = list(search_fields) + ['id', 'project_id']
     ordering_fields = filter_fields
     ordering = "-id"
+    lookup_fields = {
+        'created_date': 'created_date',
+        'updated_date': 'updated_date',
+        'status': 'status',
+        'project': 'project_id'
+    }
     iam_organization_field = 'organization'
 
     def get_queryset(self):
@@ -942,8 +948,7 @@ class JobViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
         'task_name': 'segment__task__name',
         'project_name': 'segment__task__project__name',
         'updated_date': 'segment__task__updated_date',
-        'assignee': 'assignee__username',
-        'task_created_date': 'segment__task__created_date'
+        'assignee': 'assignee__username'
     }
 
     def get_queryset(self):
