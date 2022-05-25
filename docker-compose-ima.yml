@@ -6,12 +6,32 @@ services:
     image: openpolicyagent/opa:0.34.2-rootless
     restart: always
     networks:
-      - ima
+      cvat_dev:
+        aliases:
+          - ima
     volumes:
       - ./cvat/apps/iam/rules:/rules
     ports:
       - '8181:8181'
     command: run --server --addr :8181 --set=decision_logs.console=true /rules
 
+  cvat_db:
+    container_name: cvat_db_dev
+    image: postgres:10-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: cvat
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - cvat_db_dev:/var/lib/postgresql/data
+    ports:
+      - '5433:5432'
+    networks:
+      - cvat_dev
+
+volumes:
+  cvat_db_dev:
+
 networks:
-  ima:
+  cvat_dev:

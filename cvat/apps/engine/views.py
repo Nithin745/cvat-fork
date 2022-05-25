@@ -576,9 +576,11 @@ class TaskViewSet(UploadMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        print(f"Task Action: {self.action}")
         if self.action == 'list':
             perm = TaskPermission.create_scope_list(self.request)
             queryset = perm.filter(queryset)
+            print(len(queryset))
 
         return queryset
 
