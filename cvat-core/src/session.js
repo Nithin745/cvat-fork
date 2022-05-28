@@ -1093,6 +1093,7 @@
                 size: undefined,
                 mode: undefined,
                 owner: null,
+                path: null,
                 assignee: null,
                 created_date: undefined,
                 updated_date: undefined,
@@ -1107,6 +1108,7 @@
                 data_chunk_size: undefined,
                 data_compressed_chunk_type: undefined,
                 data_original_chunk_type: undefined,
+                processed_task: undefined,
                 use_zip_chunks: undefined,
                 use_cache: undefined,
                 copy_data: undefined,
@@ -1228,6 +1230,13 @@
                     status: {
                         get: () => data.status,
                     },
+                    path: {
+                        get: () => data.path,
+                    },
+                    processed_task: {
+                        get: () => data.processed_task,
+                    },
+            
                     /**
                      * @name size
                      * @type {integer}

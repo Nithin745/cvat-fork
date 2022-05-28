@@ -81,10 +81,10 @@ function TasksPageComponent(props: Props): JSX.Element {
             );
         }
     }, [countInvisible]);
-
+    
     const content = count ? (
         <>
-            <TaskListContainer />
+            <TaskListContainer/>
             <Row justify='center' align='middle'>
                 <Col md={22} lg={18} xl={16} xxl={14}>
                     <Pagination

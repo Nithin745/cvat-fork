@@ -6,6 +6,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import Text from 'antd/lib/typography/Text';
+import { Checkbox } from 'antd';
 import { Row, Col } from 'antd/lib/grid';
 import Button from 'antd/lib/button';
 import { MoreOutlined } from '@ant-design/icons';
@@ -43,6 +44,7 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
         const { taskInstance } = this.props;
         const { id } = taskInstance;
         const owner = taskInstance.owner ? taskInstance.owner.username : null;
+        const vpath = taskInstance.path ? taskInstance.path : null;
         const updated = moment(taskInstance.updatedDate).fromNow();
         const created = moment(taskInstance.createdDate).format('MMMM Do YYYY');
 
@@ -51,7 +53,8 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
 
         return (
             <Col span={10} className='cvat-task-item-description'>
-                <Text strong type='secondary' className='cvat-item-task-id'>{`#${id}: `}</Text>
+                  <Checkbox value={id}>
+                <Text strong type='secondary' className='cvat-item-task-id'>{`#${id}: `}</Text></Checkbox>
                 <Text strong className='cvat-item-task-name'>
                     {name}
                 </Text>
@@ -62,7 +65,8 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                         <br />
                     </>
                 )}
-                <Text type='secondary'>{`Last updated ${updated}`}</Text>
+                <Text type='secondary'>{`Last updated ${updated}`}</Text><br />
+                <Text type='secondary'><strong>File Name:</strong>{` ${vpath}`}</Text>
             </Col>
         );
     }
@@ -100,7 +104,50 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
         }
 
         const jobsProgress = numOfCompleted / numOfJobs;
+        const { processed_task }  = taskInstance|| {};
+        const plainOptions = ['PROCESSED'];
+        let headers = {};
+        let token = localStorage.getItem("token")? localStorage.getItem("token").toString().replace(/\"/g, ""):'';
+        if (token) {
+            headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token.replace(/^"(.*)"$/, '$1')}`
+              };
+        }
+        taskInstance.processed = processed_task && processed_task.processed=='PROCESSED' ? 'PROCESSED':'';
+        const onChange = tasks => (e)=> {
+            if(tasks.processed_task !== null ) {
+                fetch(tasks.processed_task.url, {
+                    credentials: 'same-origin',
+                    method: 'PUT', // or 'PUT'
+                    headers: headers,
+                    body: JSON.stringify({id: Number(tasks.processed_task.id),
+                        processed: e[0] !== "PROCESSED"?"NOT PROCESSED":"PROCESSED",
+                        task_id: tasks.processed_task.task_id}),
+                  })
+                .then(resp => resp.blob())
+                .then(blob => {
+                  console.log("saved");
+                })
+                .catch((err) => console.log(err));
+            } else{
+                fetch(`${cvat.config.backendAPI}/processedtask-detail`, {
+                    credentials: 'same-origin',
+                    method: 'POST', // or 'PUT'
+                    headers: headers,
+                    body: JSON.stringify({
+                        processed: e[0] !== "PROCESSED"?"NOT PROCESSED":"PROCESSED",
+                        task_id: tasks.id}),
+                  })
+                .then(resp => resp.blob())
+                .then(blob => {
+                  console.log("saved");
+                })
+                .catch((err) => console.log(err));
+            }
 
+          };
+      
         return (
             <Col span={6}>
                 <Row justify='space-between' align='top'>
@@ -130,6 +177,20 @@ class TaskItemComponent extends React.PureComponent<TaskItemProps & RouteCompone
                     activeInference={activeInference}
                     cancelAutoAnnotation={cancelAutoAnnotation}
                 />
+                    {processed_task!=null?
+                <Row justify='end'>
+                    <Col>
+
+                   <Checkbox.Group options={plainOptions} defaultValue={taskInstance.processed} onChange={onChange(taskInstance)}/>
+
+                    </Col>
+                </Row>: <Row justify='end'>
+                    <Col>
+
+                   <Checkbox.Group options={plainOptions} onChange={onChange(taskInstance)}/>
+
+                    </Col>
+                </Row>}
             </Col>
         );
     }

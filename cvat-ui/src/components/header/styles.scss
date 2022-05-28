@@ -14,7 +14,7 @@
 }
 
 .ant-btn.cvat-header-button {
-    color: $text-color;
+    color: $header-link-color;
     padding: 0 $grid-unit-size;
     margin-right: $grid-unit-size;
 }
@@ -49,6 +49,12 @@
     }
 }
 
+.cvat-logo-icon img{
+	height: 40px;
+	padding-left: 10px;
+	padding-right: 30px;
+}
+
 .anticon.cvat-logo-icon {
     > svg {
         transform: scale(0.7);
@@ -59,7 +65,10 @@
     display: flex;
     align-items: center;
     border-left: 1px solid $border-color-1;
-
+    color: $header-link-color;
+    .cvat-header-menu-user-dropdown-user {
+        color: $header-link-color;
+    }
     .anticon.cvat-header-dropdown-icon {
         &.anticon-caret-down {
             font-size: 12px;

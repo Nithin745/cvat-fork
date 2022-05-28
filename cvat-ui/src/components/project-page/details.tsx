@@ -14,18 +14,40 @@ import { updateProjectAsync } from 'actions/projects-actions';
 import LabelsEditor from 'components/labels-editor/labels-editor';
 import BugTrackerEditor from 'components/task-page/bug-tracker-editor';
 import UserSelector from 'components/task-page/user-selector';
+import { Anchor, Button } from 'antd';
 
 const core = getCore();
 
 interface DetailsComponentProps {
     project: any;
+    tasksValue: any;
 }
 
 export default function DetailsComponent(props: DetailsComponentProps): JSX.Element {
-    const { project } = props;
+    const { project, tasksValue } = props;
 
     const dispatch = useDispatch();
     const [projectName, setProjectName] = useState(project.name);
+    const [loading, setLoading] = useState(false);
+    const enterLoading = index => {
+		setLoading(true);
+			fetch('https://data.drill-d.co.il/generatejson.php?project_id='+index+'&tasks_id='+tasksValue)
+			.then(resp => resp.blob())
+			.then(blob => {
+				const url = window.URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.style.display = 'none';
+				a.href = url;
+				// the filename you want
+				a.download = projectName+new Date().getTime()+'.json';
+				document.body.appendChild(a);
+				a.click();
+				window.URL.revokeObjectURL(url);
+				setLoading(false);
+			})
+			.catch((err) => console.log(err));
+  	};
+
 
     return (
         <div cvat-project-id={project.id} className='cvat-project-details'>
@@ -44,6 +66,22 @@ export default function DetailsComponent(props: DetailsComponentProps): JSX.Elem
                     >
                         {projectName}
                     </Title>
+                    {tasksValue.length === 0?
+                        <Button
+                        type="primary"
+                        loading={loading}
+                        onClick={() => enterLoading(project.id)}
+                      >
+                       Download JSON
+                      </Button>:
+
+                        <Button
+                        type="primary"
+                        loading={loading}
+                        onClick={() => enterLoading(project.id)}
+                      >
+                       Download Selected Tasks
+                      </Button>}
                 </Col>
             </Row>
             <Row justify='space-between' className='cvat-project-description'>

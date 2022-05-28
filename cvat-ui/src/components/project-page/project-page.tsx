@@ -43,6 +43,7 @@ interface ParamType {
 
 export default function ProjectPageComponent(): JSX.Element {
     const id = +useParams<ParamType>().id;
+    const [tasks_id, setTasksId] = useState([]);
     const dispatch = useDispatch();
     const history = useHistory();
     const projects = useSelector((state: CombinedState) => state.projects.current).map((project) => project.instance);
@@ -162,7 +163,7 @@ export default function ProjectPageComponent(): JSX.Element {
         <Row justify='center' align='top' className='cvat-project-page'>
             <Col md={22} lg={18} xl={16} xxl={14}>
                 <ProjectTopBar projectInstance={project} />
-                <DetailsComponent project={project} />
+                <DetailsComponent project={project} tasksValue={tasks_id}/>
                 <Row justify='space-between' align='middle' className='cvat-project-page-tasks-bar'>
                     <Col span={24}>
                         <div className='cvat-project-page-tasks-filters-wrapper'>

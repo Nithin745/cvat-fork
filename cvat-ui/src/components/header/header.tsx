@@ -380,7 +380,7 @@ function HeaderContainer(props: Props): JSX.Element {
     return (
         <Layout.Header className='cvat-header'>
             <div className='cvat-left-header'>
-                <Icon className='cvat-logo-icon' component={CVATLogo} />
+            <a href='/' class='cvat-logo-icon'><img src='https://drill-d.co.il/wp-content/uploads/2020/06/Big-Logo.d110a0.webp' class='h-10'/></a>
                 <Button
                     className={getButtonClassName('projects')}
                     type='link'
@@ -404,30 +404,6 @@ function HeaderContainer(props: Props): JSX.Element {
                     }}
                 >
                     Tasks
-                </Button>
-                <Button
-                    className={getButtonClassName('jobs')}
-                    type='link'
-                    value='jobs'
-                    href='/jobs?page=1'
-                    onClick={(event: React.MouseEvent): void => {
-                        event.preventDefault();
-                        history.push('/jobs');
-                    }}
-                >
-                    Jobs
-                </Button>
-                <Button
-                    className={getButtonClassName('cloudstorages')}
-                    type='link'
-                    value='cloudstorages'
-                    href='/cloudstorages?page=1'
-                    onClick={(event: React.MouseEvent): void => {
-                        event.preventDefault();
-                        history.push('/cloudstorages');
-                    }}
-                >
-                    Cloud Storages
                 </Button>
                 {isModelsPluginActive ? (
                     <Button
@@ -460,36 +436,7 @@ function HeaderContainer(props: Props): JSX.Element {
                 ) : null}
             </div>
             <div className='cvat-right-header'>
-                <CVATTooltip overlay='Click to open repository'>
-                    <Button
-                        icon={<GithubOutlined />}
-                        size='large'
-                        className='cvat-header-button'
-                        type='link'
-                        href={GITHUB_URL}
-                        onClick={(event: React.MouseEvent): void => {
-                            event.preventDefault();
-                            // false alarm
-                            // eslint-disable-next-line security/detect-non-literal-fs-filename
-                            window.open(GITHUB_URL, '_blank');
-                        }}
-                    />
-                </CVATTooltip>
-                <CVATTooltip overlay='Click to open guide'>
-                    <Button
-                        icon={<QuestionCircleOutlined />}
-                        size='large'
-                        className='cvat-header-button'
-                        type='link'
-                        href={GUIDE_URL}
-                        onClick={(event: React.MouseEvent): void => {
-                            event.preventDefault();
-                            // false alarm
-                            // eslint-disable-next-line security/detect-non-literal-fs-filename
-                            window.open(GUIDE_URL, '_blank');
-                        }}
-                    />
-                </CVATTooltip>
+
                 <Dropdown placement='bottomRight' overlay={userMenu} className='cvat-header-menu-user-dropdown'>
                     <span>
                         <UserOutlined className='cvat-header-dropdown-icon' />

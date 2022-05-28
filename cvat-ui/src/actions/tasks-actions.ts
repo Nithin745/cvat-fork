@@ -32,6 +32,8 @@ export enum TasksActionTypes {
     UPDATE_JOB_SUCCESS = 'UPDATE_JOB_SUCCESS',
     UPDATE_JOB_FAILED = 'UPDATE_JOB_FAILED',
     HIDE_EMPTY_TASKS = 'HIDE_EMPTY_TASKS',
+    PUSH_TASKS_IDS = 'PUSH_TASKS_IDS',
+    REMOVE_TASKS_IDS = 'REMOVE_TASKS_IDS',
     EXPORT_TASK = 'EXPORT_TASK',
     EXPORT_TASK_SUCCESS = 'EXPORT_TASK_SUCCESS',
     EXPORT_TASK_FAILED = 'EXPORT_TASK_FAILED',
@@ -520,6 +522,23 @@ export function hideEmptyTasks(hideEmpty: boolean): AnyAction {
         },
     };
 
+    return action;
+}
+export function pushTaskIds(tasks: Array): AnyAction {
+    const action = {
+        type: TasksActionTypes.PUSH_TASKS_IDS,
+        payload: {
+            tasks,
+        },
+    };
+    return action;
+}
+
+export function removeTaskIds(): AnyAction {
+    const action = {
+        type: TasksActionTypes.REMOVE_TASKS_IDS,
+        payload: {},
+    };
     return action;
 }
 

@@ -15,6 +15,8 @@ const defaultState: TasksState = {
     fetching: false,
     updating: false,
     hideEmpty: false,
+    tasks_id:[],
+    next_task: {},
     moveTask: {
         modalVisible: false,
         taskId: null,
@@ -340,6 +342,21 @@ export default (state: TasksState = defaultState, action: AnyAction): TasksState
                 hideEmpty: action.payload.hideEmpty,
             };
         }
+        case TasksActionTypes.PUSH_TASKS_IDS: {
+            console.log('pushtask reducer')
+         return {
+             ...state,
+             tasks_id: action.payload.tasks,
+         };
+     }
+     case TasksActionTypes.REMOVE_TASKS_IDS: {
+         console.log('removetask reducer')
+         return {
+             ...state,
+             tasks_id: [],
+         };
+     }
+
         case TasksActionTypes.SWITCH_MOVE_TASK_MODAL_VISIBLE: {
             return {
                 ...state,

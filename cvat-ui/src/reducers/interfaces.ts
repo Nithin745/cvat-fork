@@ -34,6 +34,7 @@ export interface ProjectsQuery {
 export interface Project {
     instance: any;
     preview: string;
+    tasks_id: []
 }
 
 export interface ProjectsState {
@@ -65,6 +66,7 @@ export interface TasksQuery {
     filter: string | null;
     sort: string | null;
     projectId: number | null;
+    path: string | null;
 }
 
 export interface Task {
