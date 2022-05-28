@@ -55,6 +55,12 @@ export const config: Partial<Config> = {
             type: 'datetime',
             operators: ['between', 'greater', 'greater_or_equal', 'less', 'less_or_equal'],
         },
+        camera: {
+            label: 'Camera',
+            type: 'text',
+            valueSources: ['value'],
+            operators: ['equal'],
+        },
     },
 };
 
@@ -64,4 +70,8 @@ export const predefinedFilterValues = {
     'Assigned to me': '{"and":[{"==":[{"var":"assignee"},"<username>"]}]}',
     'Owned by me': '{"and":[{"==":[{"var":"owner"},"<username>"]}]}',
     'Not completed': '{"!":{"and":[{"==":[{"var":"status"},"completed"]}]}}',
+    Completed: '{"and":[{"==":[{"var":"status"},"completed"]}]}',
+    Camera5: '{"and":[{"==":[{"var":"camera"},"camera5"]}]}',
+    Camera6: '{"and":[{"==":[{"var":"camera"},"camera6"]}]}',
+    Camera7: '{"and":[{"==":[{"var":"camera"},"camera7"]}]}',
 };

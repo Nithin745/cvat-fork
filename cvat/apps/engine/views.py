@@ -587,7 +587,7 @@ class TaskViewSet(UploadMixin, viewsets.ModelViewSet):
             "label_set__attributespec_set",
             "segment_set__job_set")
     serializer_class = TaskSerializer
-    lookup_fields = {'project_name': 'project__name'}
+    lookup_fields = {'project_name': 'project__name', 'camera': 'camera_name__name'}
     search_fields = ('project_name', 'name', 'status')
     filter_fields = list(search_fields) + ['id', 'project_id', 'updated_date', 'created_date']
     ordering_fields = filter_fields
