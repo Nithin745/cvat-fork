@@ -49,7 +49,7 @@ from cvat.apps.engine.mime_types import mimetypes
 from cvat.apps.engine.models import (
     Job, Task, Project, Issue, Data,
     Comment, StorageMethodChoice, StorageChoice, Image,
-    CloudProviderChoice
+    CloudProviderChoice, CameraName
 )
 from cvat.apps.engine.models import CloudStorage as CloudStorageModel
 from cvat.apps.engine.serializers import (
@@ -59,7 +59,7 @@ from cvat.apps.engine.serializers import (
     LogEventSerializer, ProjectSerializer, ProjectSearchSerializer,
     RqStatusSerializer, TaskSerializer, UserSerializer, PluginsSerializer, IssueReadSerializer,
     IssueWriteSerializer, CommentReadSerializer, CommentWriteSerializer, CloudStorageWriteSerializer,
-    CloudStorageReadSerializer, DatasetFileSerializer, JobCommitSerializer)
+    CloudStorageReadSerializer, DatasetFileSerializer, JobCommitSerializer, CameraNameSerializer)
 
 from utils.dataset_manifest import ImageManifestManager
 from cvat.apps.engine.utils import av_scan_paths
@@ -587,26 +587,18 @@ class TaskViewSet(UploadMixin, viewsets.ModelViewSet):
             "label_set__attributespec_set",
             "segment_set__job_set")
     serializer_class = TaskSerializer
-    lookup_fields = {'project_name': 'project__name', 'owner': 'owner__username', 'assignee': 'assignee__username'}
-    search_fields = ('project_name', 'name', 'owner', 'status', 'assignee', 'subset', 'mode', 'dimension')
-    filter_fields = list(search_fields) + ['id', 'project_id', 'updated_date']
+    lookup_fields = {'project_name': 'project__name'}
+    search_fields = ('project_name', 'name', 'status')
+    filter_fields = list(search_fields) + ['id', 'project_id', 'updated_date', 'created_date']
     ordering_fields = filter_fields
     ordering = "-id"
-    lookup_fields = {
-        'created_date': 'created_date',
-        'updated_date': 'updated_date',
-        'status': 'status',
-        'project': 'project_id'
-    }
     iam_organization_field = 'organization'
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        print(f"Task Action: {self.action}")
         if self.action == 'list':
             perm = TaskPermission.create_scope_list(self.request)
             queryset = perm.filter(queryset)
-            print(len(queryset))
 
         return queryset
 
@@ -629,6 +621,12 @@ class TaskViewSet(UploadMixin, viewsets.ModelViewSet):
     def export_backup(self, request, pk=None):
         db_task = self.get_object() # force to call check_object_permissions
         return backup.export(db_task, request)
+
+    @action(methods=['GET'], detail=False)
+    def camera_name(self, request):
+        camera_name_db = CameraName.objects.all()
+        data = CameraNameSerializer(camera_name_db, many=True).data
+        return Response(data, status=status.HTTP_200_OK)
 
     def perform_update(self, serializer):
         instance = serializer.instance

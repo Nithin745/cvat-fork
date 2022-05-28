@@ -6,18 +6,6 @@ import { Config } from 'react-awesome-query-builder';
 
 export const config: Partial<Config> = {
     fields: {
-        dimension: {
-            label: 'Dimension',
-            type: 'select',
-            operators: ['select_equals'],
-            valueSources: ['value'],
-            fieldSettings: {
-                listValues: [
-                    { value: '2d', title: '2D' },
-                    { value: '3d', title: '3D' },
-                ],
-            },
-        },
         status: {
             label: 'Status',
             type: 'select',
@@ -30,35 +18,6 @@ export const config: Partial<Config> = {
                     { value: 'completed', title: 'Completed' },
                 ],
             },
-        },
-        mode: {
-            label: 'Data',
-            type: 'select',
-            valueSources: ['value'],
-            fieldSettings: {
-                listValues: [
-                    { value: 'interpolation', title: 'Video' },
-                    { value: 'annotation', title: 'Images' },
-                ],
-            },
-        },
-        subset: {
-            label: 'Subset',
-            type: 'text',
-            valueSources: ['value'],
-            operators: ['equal'],
-        },
-        assignee: {
-            label: 'Assignee',
-            type: 'text',
-            valueSources: ['value'],
-            operators: ['equal'],
-        },
-        owner: {
-            label: 'Owner',
-            type: 'text',
-            valueSources: ['value'],
-            operators: ['equal'],
         },
         updated_date: {
             label: 'Last updated',
@@ -90,6 +49,11 @@ export const config: Partial<Config> = {
             type: 'text',
             valueSources: ['value'],
             operators: ['like'],
+        },
+        created_date: {
+            label: 'Created Date',
+            type: 'datetime',
+            operators: ['between', 'greater', 'greater_or_equal', 'less', 'less_or_equal'],
         },
     },
 };

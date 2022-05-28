@@ -404,6 +404,12 @@ class DataSerializer(serializers.ModelSerializer):
                 remote_file = models.RemoteFile(data=instance, **f)
                 remote_file.save()
 
+class CameraNameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.CameraName
+        fields = ('id', 'name')
+
 class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
     labels = LabelSerializer(many=True, source='label_set', partial=True, required=False)
     segments = SegmentSerializer(many=True, source='segment_set', read_only=True)
@@ -420,6 +426,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
     project_id = serializers.IntegerField(required=False, allow_null=True)
     dimension = serializers.CharField(allow_blank=True, required=False)
     path = serializers.ReadOnlyField(source='data.video.path')
+    camera_name = serializers.PrimaryKeyRelatedField(queryset=models.CameraName.objects.all())
 
     class Meta:
         model = models.Task
@@ -427,7 +434,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
             'owner_id', 'assignee_id', 'bug_tracker', 'created_date', 'updated_date',
             'overlap', 'segment_size', 'status', 'labels', 'segments',
             'data_chunk_size', 'data_compressed_chunk_type', 'data_original_chunk_type',
-            'size', 'image_quality', 'data', 'dimension', 'subset', 'organization', 'path')
+            'size', 'image_quality', 'data', 'dimension', 'subset', 'organization', 'path', 'camera_name')
         read_only_fields = ('mode', 'created_date', 'updated_date', 'status',
             'data_chunk_size', 'owner', 'assignee', 'data_compressed_chunk_type',
             'data_original_chunk_type', 'size', 'image_quality', 'data',
@@ -494,6 +501,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
             instance.bug_tracker)
         instance.subset = validated_data.get('subset', instance.subset)
         labels = validated_data.get('label_set', [])
+        instance.camera_name = validated_data('camera_name', None)
         if instance.project_id is None:
             for label in labels:
                 LabelSerializer.update_instance(label, instance)

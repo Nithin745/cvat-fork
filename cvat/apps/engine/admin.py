@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 from django.contrib import admin
-from .models import Task, Segment, Job, Label, AttributeSpec, Project, CloudStorage
+from .models import Task, Segment, Job, Label, AttributeSpec, Project, CloudStorage, CameraName
 
 class JobInline(admin.TabularInline):
     model = Job
@@ -96,8 +96,13 @@ class CloudStorageAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
 
+
+class CameraNameAdmin(admin.ModelAdmin):
+    model = CameraName
+
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Segment, SegmentAdmin)
 admin.site.register(Label, LabelAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(CloudStorage, CloudStorageAdmin)
+admin.site.register(CameraName, CameraNameAdmin)

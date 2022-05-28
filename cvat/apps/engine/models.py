@@ -264,6 +264,12 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+class CameraName(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.CharField(max_length=512, null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
 class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE,
         null=True, blank=True, related_name="tasks",
@@ -287,6 +293,7 @@ class Task(models.Model):
     subset = models.CharField(max_length=64, blank=True, default="")
     organization = models.ForeignKey(Organization, null=True, default=None,
         blank=True, on_delete=models.SET_NULL, related_name="tasks")
+    camera_name = models.ForeignKey(CameraName, on_delete=models.SET_NULL, null=True, blank=True)
 
 
     # Extend default permission model
