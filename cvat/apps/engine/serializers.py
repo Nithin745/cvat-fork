@@ -501,7 +501,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
             instance.bug_tracker)
         instance.subset = validated_data.get('subset', instance.subset)
         labels = validated_data.get('label_set', [])
-        instance.camera_name = validated_data('camera_name', None)
+        instance.camera_name = validated_data.get('camera_name', None)
         if instance.project_id is None:
             for label in labels:
                 LabelSerializer.update_instance(label, instance)
