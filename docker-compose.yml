@@ -17,6 +17,8 @@ services:
       - cvat_db:/var/lib/postgresql/data
     networks:
       - cvat
+    ports:
+      - '5432:5432'
 
   cvat_redis:
     container_name: cvat_redis
