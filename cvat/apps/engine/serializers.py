@@ -7,6 +7,7 @@ import re
 import shutil
 
 from tempfile import NamedTemporaryFile
+from attr import attributes
 
 from rest_framework import serializers, exceptions
 from django.contrib.auth.models import User, Group
@@ -63,7 +64,7 @@ class AttributeSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         if instance:
             attribute = super().to_representation(instance)
-            attribute['values'] = attribute['values'].split('\n')
+            attribute['values'] = attribute['values'].split('\n')[::-1]
         else:
             attribute = instance
 
@@ -179,10 +180,13 @@ class JobWriteSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         state = validated_data.get('state')
         stage = validated_data.get('stage')
+        status = validated_data.get('status')
         if stage:
             if stage == models.StageChoice.ANNOTATION:
                 status = models.StatusChoice.ANNOTATION
             elif stage == models.StageChoice.ACCEPTANCE and state == models.StateChoice.COMPLETED:
+                status = models.StatusChoice.COMPLETED
+            elif stage == models.StageChoice.ACCEPTANCE:
                 status = models.StatusChoice.COMPLETED
             else:
                 status = models.StatusChoice.VALIDATION

@@ -70,8 +70,8 @@ export const predefinedFilterValues = {
     'Assigned to me': '{"and":[{"==":[{"var":"assignee"},"<username>"]}]}',
     'Owned by me': '{"and":[{"==":[{"var":"owner"},"<username>"]}]}',
     'Not completed': '{"!":{"and":[{"==":[{"var":"status"},"completed"]}]}}',
-    Completed: '{"and":[{"==":[{"var":"status"},"completed"]}]}',
-    Camera5: '{"and":[{"==":[{"var":"camera"},"camera5"]}]}',
-    Camera6: '{"and":[{"==":[{"var":"camera"},"camera6"]}]}',
-    Camera7: '{"and":[{"==":[{"var":"camera"},"camera7"]}]}',
+    'Completed': '{"and":[{"==":[{"var":"status"},"completed"]}]}',
+    'Camera5': '{"and":[{"==":[{"var":"camera"},"camera5"]}]}',
+    'Camera6': '{"and":[{"==":[{"var":"camera"},"camera6"]}]}',
+    'Camera7': '{"and":[{"==":[{"var":"camera"},"camera7"]}]}',
 };

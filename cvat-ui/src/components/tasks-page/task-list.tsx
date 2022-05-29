@@ -89,7 +89,7 @@ function TaskListComponent(props: Props): JSX.Element {
 
     const enterLoading = () => {
         setjsonLoading(true);
-            fetch('https://data.drill-d.co.il/generatetaskjson.php?tasks_id='+tasks_id+'&project_id='+selprojid+'&status='+selprostat+'&fromDate='+selfrom+'&toDate='+selto)
+            fetch('http://192.168.1.202/generatetaskjson.php?tasks_id='+tasks_id+'&project_id='+selprojid+'&status='+selprostat+'&fromDate='+selfrom+'&toDate='+selto)
             .then(resp => resp.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
@@ -109,7 +109,7 @@ function TaskListComponent(props: Props): JSX.Element {
       const downloadPHP = () => {
         setcsvLoading(true);
         console.log('download php')
-            fetch('https://data.drill-d.co.il/downloadvideos.php')
+            fetch('https://192.168.1.202/downloadvideos.php')
             .then(resp => resp.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
@@ -175,7 +175,7 @@ function TaskListComponent(props: Props): JSX.Element {
                 </Row>
             </Col>
         </Row>
- 
+
          <Checkbox.Group style={{ width: '100%' }} onChange={onChange} value={checkedList} >
             <Row justify='center' align='middle'>
                 <Col className='cvat-tasks-list' md={22} lg={18} xl={16} xxl={14}>

@@ -55,8 +55,8 @@ export const localStorageRecentCapacity = 10;
 export const localStorageRecentKeyword = 'recentlyAppliedProjectTasksFilters';
 export const predefinedFilterValues = {
     'Not completed': '{"!":{"and":[{"==":[{"var":"status"},"completed"]}]}}',
-    Completed: '{"and":[{"==":[{"var":"status"},"completed"]}]}',
-    Camera5: '{"and":[{"==":[{"var":"camera"},"camera5"]}]}',
-    Camera6: '{"and":[{"==":[{"var":"camera"},"camera6"]}]}',
-    Camera7: '{"and":[{"==":[{"var":"camera"},"camera7"]}]}',
+    'Completed': '{"and":[{"==":[{"var":"status"},"completed"]}]}',
+    'Camera5': '{"and":[{"==":[{"var":"camera"},"camera5"]}]}',
+    'Camera6': '{"and":[{"==":[{"var":"camera"},"camera6"]}]}',
+    'Camera7': '{"and":[{"==":[{"var":"camera"},"camera7"]}]}',
 };
