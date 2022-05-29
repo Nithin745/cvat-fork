@@ -186,8 +186,6 @@ class JobWriteSerializer(serializers.ModelSerializer):
                 status = models.StatusChoice.ANNOTATION
             elif stage == models.StageChoice.ACCEPTANCE and state == models.StateChoice.COMPLETED:
                 status = models.StatusChoice.COMPLETED
-            elif stage == models.StageChoice.ACCEPTANCE:
-                status = models.StatusChoice.COMPLETED
             else:
                 status = models.StatusChoice.VALIDATION
 
