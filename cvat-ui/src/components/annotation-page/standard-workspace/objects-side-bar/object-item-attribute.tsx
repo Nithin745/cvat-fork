@@ -121,11 +121,13 @@ function ItemAttributeComponent(props: Props): JSX.Element {
                         value={attrValue}
                         className='cvat-object-item-select-attribute'
                     >
-                  attrValues.reverse().map(
+                 {attrValues.reverse().map(
                             (value: string): JSX.Element => (
                                 <Select.Option key={value} value={value}>
                                     {value === consts.UNDEFINED_ATTRIBUTE_VALUE ? consts.NO_BREAK_SPACE : value}
                                 </Select.Option>
+                            ),
+                        )}
                     </Select>
                 </Col>
             </>
