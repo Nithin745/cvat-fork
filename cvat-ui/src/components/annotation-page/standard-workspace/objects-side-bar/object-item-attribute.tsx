@@ -108,17 +108,32 @@ function ItemAttributeComponent(props: Props): JSX.Element {
                         onChange={(value: string): void => {
                             changeAttribute(attrID, value);
                         }}
+                        filterOption={(input: string, option?: OptionData | OptionGroupData) => {
+                            if (option) {
+                                const { children } = option.props;
+                                if (typeof children === 'string') {
+                                    return children.toLowerCase().includes(input.toLowerCase());
+                                }
+                            }
+
+                            return false;
+                        }}
                         value={attrValue}
                         className='cvat-object-item-select-attribute'
                     >
-                        {attrValues.map(
+                   {attrName==='shelf_name'? attrValues.reverse().map(
                             (value: string): JSX.Element => (
                                 <Select.Option key={value} value={value}>
                                     {value === consts.UNDEFINED_ATTRIBUTE_VALUE ? consts.NO_BREAK_SPACE : value}
                                 </Select.Option>
                             ),
-                        )}
-                    </Select>
+                        ):attrValues.map(
+                            (value: string): JSX.Element => (
+                                <Select.Option key={value} value={value}>
+                                    {value === consts.UNDEFINED_ATTRIBUTE_VALUE ? consts.NO_BREAK_SPACE : value}
+                                </Select.Option>
+                            ),
+                        )}   </Select>
                 </Col>
             </>
         );
