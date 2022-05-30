@@ -31,7 +31,7 @@ export default function DetailsComponent(props: DetailsComponentProps): JSX.Elem
     const [loading, setLoading] = useState(false);
     const enterLoading = index => {
 		setLoading(true);
-			fetch('https://192.168.1.202/generatejson.php?project_id='+index+'&tasks_id='+tasksValue)
+			fetch('http://192.168.1.202/generatejson.php?project_id='+index+'&tasks_id='+tasksValue)
 			.then(resp => resp.blob())
 			.then(blob => {
 				const url = window.URL.createObjectURL(blob);

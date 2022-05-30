@@ -109,7 +109,7 @@ function TaskListComponent(props: Props): JSX.Element {
       const downloadPHP = () => {
         setcsvLoading(true);
         console.log('download php')
-            fetch('https://192.168.1.202/downloadvideos.php')
+            fetch('http://192.168.1.202/downloadvideos.php')
             .then(resp => resp.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
