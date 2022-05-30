@@ -104,6 +104,7 @@ function ItemAttributeComponent(props: Props): JSX.Element {
                     <Select
                         disabled={readonly}
                         size='small'
+                        showSearch
                         onChange={(value: string): void => {
                             changeAttribute(attrID, value);
                         }}

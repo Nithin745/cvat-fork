@@ -89,7 +89,7 @@ function TaskListComponent(props: Props): JSX.Element {
 
     const enterLoading = () => {
         setjsonLoading(true);
-            fetch('http://192.168.1.202/generatetaskjson.php?tasks_id='+tasks_id+'&project_id='+selprojid+'&status='+selprostat+'&fromDate='+selfrom+'&toDate='+selto)
+            fetch('http://192.168.1.202:81/generatetaskjson.php?tasks_id='+tasks_id+'&project_id='+selprojid+'&status='+selprostat+'&fromDate='+selfrom+'&toDate='+selto)
             .then(resp => resp.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
@@ -109,7 +109,7 @@ function TaskListComponent(props: Props): JSX.Element {
       const downloadPHP = () => {
         setcsvLoading(true);
         console.log('download php')
-            fetch('http://192.168.1.202/downloadvideos.php')
+            fetch('http://192.168.1.202:81/downloadvideos.php')
             .then(resp => resp.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);

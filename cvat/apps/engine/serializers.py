@@ -428,7 +428,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
     project_id = serializers.IntegerField(required=False, allow_null=True)
     dimension = serializers.CharField(allow_blank=True, required=False)
     path = serializers.ReadOnlyField(source='data.video.path')
-    camera_name = serializers.PrimaryKeyRelatedField(queryset=models.CameraName.objects.all())
+    camera_name = serializers.PrimaryKeyRelatedField(queryset=models.CameraName.objects.all(), required=False)
 
     class Meta:
         model = models.Task
@@ -618,7 +618,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             if not task_obj:
                 return None
             task = TaskSerializer(task_obj, context=self.context).data
-            task = task.pop('segments')
+         #   task = task.pop('segments')
         else:
             return None
 

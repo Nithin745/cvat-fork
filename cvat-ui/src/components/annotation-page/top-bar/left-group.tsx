@@ -20,8 +20,13 @@ import {
 import { ActiveControl, ToolsBlockerState } from 'reducers/interfaces';
 import CVATTooltip from 'components/common/cvat-tooltip';
 import getCore from 'cvat-core-wrapper';
-const core = getCore();
 
+
+const core = getCore();
+interface ProjectPartialWithSubsets {
+    id: number;
+    subsets: Array<string>;
+}
 interface Props {
     saving: boolean;
     savingStatuses: string[];
@@ -78,7 +83,8 @@ function LeftGroup(props: Props): JSX.Element {
     const currTask = tasks.filter(element => element.instance.id == tid);
     const history = useHistory();
     const redirectURL = () => {
-        core.projects.get({ id: currTask[0].instance.projectId, withoutTasks: true,  task_id: currTask[0].instance.id}).then((response:ProjectPartialWithSubsets[]) => {
+        console.log(currTask, "currentTask")
+        core.projects.get({ id: currTask[0].instance.projectId, task_id: currTask[0].instance.id}).then((response:ProjectPartialWithSubsets[]) => {
             response[0].next_task !== null?history.push("/tasks/"+response[0].next_task.id+"/jobs/"+response[0].next_task.segments[0].jobs[0].id):'';
         });
         //currTask[0].instance.next_task !== null?

@@ -223,6 +223,7 @@ const config = require('./config');
                 id: isInteger,
                 page: isInteger,
                 search: isString,
+                task_id: isInteger,
                 sort: isString,
                 filter: isString,
             });
@@ -230,11 +231,11 @@ const config = require('./config');
             checkExclusiveFields(filter, ['id'], ['page']);
             const searchParams = {};
             for (const key of Object.keys(filter)) {
-                if (['id', 'page', 'search', 'sort', 'page'].includes(key)) {
+                if (['id', 'page', 'search', 'task_id', 'sort', 'page'].includes(key)) {
                     searchParams[key] = filter[key];
                 }
             }
-
+            console.log(searchParams)
             const projectsData = await serverProxy.projects.get(searchParams);
             const projects = projectsData.map((project) => {
                 project.task_ids = project.tasks;

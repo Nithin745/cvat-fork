@@ -34,6 +34,7 @@
                 task_subsets: undefined,
                 training_project: undefined,
                 task_ids: undefined,
+                next_task: undefined,
                 dimension: undefined,
             };
 
@@ -99,6 +100,10 @@
                     status: {
                         get: () => data.status,
                     },
+                    next_task: {
+                        get: () => data.next_task,
+                     },
+                  
                     /**
                      * Instance of a user who was assigned for the project
                      * @name assignee

@@ -444,8 +444,15 @@
 
                 let response = null;
                 try {
-                    if ('id' in filter) {
+                    if ('id' in filter && !'task_id' in filter) {
                         response = await Axios.get(`${backendAPI}/projects/${filter.id}`, {
+                            proxy,
+                        });
+                        const results = [response.data];
+                        results.count = 1;
+                        return results;
+                    } else  if ('id' in filter && 'task_id' in filter) {
+                        response = await Axios.get(`${backendAPI}/projects/${filter.id}?task_id=${filter.task_id}`, {
                             proxy,
                         });
                         const results = [response.data];
