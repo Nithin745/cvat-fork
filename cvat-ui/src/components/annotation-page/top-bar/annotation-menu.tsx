@@ -43,6 +43,7 @@ export enum Actions {
     OPEN_TASK = 'open_task',
     FINISH_JOB = 'finish_job',
     RENEW_JOB = 'renew_job',
+    SUBMIT_FOR_REVIEW = 'submit_for_review',
 }
 
 function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Element {
@@ -169,6 +170,17 @@ function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Elemen
                     checkUnsavedChanges(params);
                 },
             });
+        } else if (params.key === Actions.SUBMIT_FOR_REVIEW) {
+            Modal.confirm({
+                title: 'The job stage is going to be switched',
+                content: 'Stage will be changed to "validation". Would you like to continue?',
+                okText: 'Continue',
+                cancelText: 'Cancel',
+                className: 'cvat-modal-content-finish-job',
+                onOk: () => {
+                    checkUnsavedChanges(params);
+                },
+            });
         } else if (params.key === Actions.RENEW_JOB) {
             Modal.confirm({
                 title: 'Do you want to renew the job?',
@@ -243,9 +255,11 @@ function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Elemen
                     <Text className={computeClassName(JobState.COMPLETED)}>{JobState.COMPLETED}</Text>
                 </Menu.Item>
             </Menu.SubMenu>
-            {[JobStage.ANNOTATION, JobStage.REVIEW].includes(jobStage) ?
+            {[JobStage.ANNOTATION].includes(jobStage) ?
+                <Menu.Item key={Actions.SUBMIT_FOR_REVIEW}>Submit for Review</Menu.Item> : null}
+            {[JobStage.REVIEW].includes(jobStage) ?
                 <Menu.Item key={Actions.FINISH_JOB}>Finish the job</Menu.Item> : null}
-            {jobStage === JobStage.ACCEPTANCE ?
+            {[JobStage.ACCEPTANCE, JobStage.REVIEW].includes(jobStage) ?
                 <Menu.Item key={Actions.RENEW_JOB}>Renew the job</Menu.Item> : null}
         </Menu>
     );

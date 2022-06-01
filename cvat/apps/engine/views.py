@@ -622,6 +622,14 @@ class TaskViewSet(UploadMixin, viewsets.ModelViewSet):
         db_task = self.get_object() # force to call check_object_permissions
         return backup.export(db_task, request)
 
+    @action(methods=['GET'], detail=False, url_path='next')
+    def next_task(self, request):
+        current_id = request.query_params.get('task_id', None)
+        next_task_obj = Task.objects.filter(id__gt=current_id).first()
+        task = TaskSerializer(next_task_obj, context={'request': request}).data
+
+        return Response(task)
+
     @action(methods=['GET'], detail=False)
     def camera_name(self, request):
         camera_name_db = CameraName.objects.all()
