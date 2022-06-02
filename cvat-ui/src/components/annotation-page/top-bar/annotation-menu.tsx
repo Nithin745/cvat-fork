@@ -19,6 +19,7 @@ import CVATTooltip from 'components/common/cvat-tooltip';
 import LoadSubmenu from 'components/actions-menu/load-submenu';
 import getCore from 'cvat-core-wrapper';
 import { JobStage } from 'reducers/interfaces';
+import UserSelector, { User } from '../../task-page/user-selector';
 
 const core = getCore();
 
@@ -64,6 +65,16 @@ function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Elemen
     const jobState = jobInstance.state;
     const taskID = jobInstance.taskId;
     const { JobState } = core.enums;
+    const assignee = jobInstance.assignee ? jobInstance.assignee : null;
+    const assigneeSelect = (
+        <UserSelector
+            value={assignee}
+            onSelect={(value: User | null): void => {
+                jobInstance.assignee = value;
+                // onJobUpdate(jobInstance);
+            }}
+        />
+    );
 
     function onClickMenuWrapper(params: MenuInfo): void {
         function checkUnsavedChanges(_params: MenuInfo): void {
@@ -171,9 +182,18 @@ function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Elemen
                 },
             });
         } else if (params.key === Actions.SUBMIT_FOR_REVIEW) {
+            const assignee = jobInstance.assignee ? jobInstance.assignee : null;
             Modal.confirm({
-                title: 'The job stage is going to be switched',
-                content: 'Stage will be changed to "validation". Would you like to continue?',
+                title: 'Please Choose an user to assign:',
+                content: (
+                    <UserSelector
+                        value={jobInstance.assignee}
+                        onSelect={(value: User | null): void => {
+                            jobInstance.assignee = value;
+                            onClickMenu(params);
+                        }}
+                    />
+                ),
                 okText: 'Continue',
                 cancelText: 'Cancel',
                 className: 'cvat-modal-content-finish-job',

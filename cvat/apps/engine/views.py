@@ -587,7 +587,7 @@ class TaskViewSet(UploadMixin, viewsets.ModelViewSet):
             "label_set__attributespec_set",
             "segment_set__job_set")
     serializer_class = TaskSerializer
-    lookup_fields = {'project_name': 'project__name', 'camera': 'camera_name__name'}
+    lookup_fields = {'project_name': 'project__name', 'camera': 'camera_name__name', 'assignee': 'assignee__username'}
     search_fields = ('project_name', 'name', 'status')
     filter_fields = list(search_fields) + ['id', 'project_id', 'updated_date', 'created_date']
     ordering_fields = filter_fields
@@ -621,14 +621,6 @@ class TaskViewSet(UploadMixin, viewsets.ModelViewSet):
     def export_backup(self, request, pk=None):
         db_task = self.get_object() # force to call check_object_permissions
         return backup.export(db_task, request)
-
-    @action(methods=['GET'], detail=False, url_path='next')
-    def next_task(self, request):
-        current_id = request.query_params.get('task_id', None)
-        next_task_obj = Task.objects.filter(id__gt=current_id).first()
-        task = TaskSerializer(next_task_obj, context={'request': request}).data
-
-        return Response(task)
 
     @action(methods=['GET'], detail=False)
     def camera_name(self, request):
