@@ -83,7 +83,7 @@ function LeftGroup(props: Props): JSX.Element {
     const currTask = tasks.filter(element => element.instance.id == tid);
     const history = useHistory();
     const redirectURL = () => {
-        console.log(currTask, "currentTask")
+        // console.log(currTask, "currentTask")
         core.projects.get({ id: currTask[0].instance.projectId, task_id: currTask[0].instance.id}).then((response:ProjectPartialWithSubsets[]) => {
             response[0].next_task !== null?history.push("/tasks/"+response[0].next_task.id+"/jobs/"+response[0].next_task.segments[0].jobs[0].id):'';
         });
