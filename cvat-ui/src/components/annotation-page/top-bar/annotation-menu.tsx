@@ -19,6 +19,7 @@ import CVATTooltip from 'components/common/cvat-tooltip';
 import LoadSubmenu from 'components/actions-menu/load-submenu';
 import getCore from 'cvat-core-wrapper';
 import { JobStage } from 'reducers/interfaces';
+import UserSelector, { User } from '../../task-page/user-selector';
 
 const core = getCore();
 
@@ -43,6 +44,7 @@ export enum Actions {
     OPEN_TASK = 'open_task',
     FINISH_JOB = 'finish_job',
     RENEW_JOB = 'renew_job',
+    SUBMIT_FOR_REVIEW = 'submit_for_review',
 }
 
 function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Element {
@@ -63,6 +65,16 @@ function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Elemen
     const jobState = jobInstance.state;
     const taskID = jobInstance.taskId;
     const { JobState } = core.enums;
+    const assignee = jobInstance.assignee ? jobInstance.assignee : null;
+    const assigneeSelect = (
+        <UserSelector
+            value={assignee}
+            onSelect={(value: User | null): void => {
+                jobInstance.assignee = value;
+                // onJobUpdate(jobInstance);
+            }}
+        />
+    );
 
     function onClickMenuWrapper(params: MenuInfo): void {
         function checkUnsavedChanges(_params: MenuInfo): void {
@@ -169,6 +181,26 @@ function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Elemen
                     checkUnsavedChanges(params);
                 },
             });
+        } else if (params.key === Actions.SUBMIT_FOR_REVIEW) {
+            const assignee = jobInstance.assignee ? jobInstance.assignee : null;
+            Modal.confirm({
+                title: 'Please Choose an user to assign:',
+                content: (
+                    <UserSelector
+                        value={jobInstance.assignee}
+                        onSelect={(value: User | null): void => {
+                            jobInstance.assignee = value;
+                            onClickMenu(params);
+                        }}
+                    />
+                ),
+                okText: 'Continue',
+                cancelText: 'Cancel',
+                className: 'cvat-modal-content-finish-job',
+                onOk: () => {
+                    checkUnsavedChanges(params);
+                },
+            });
         } else if (params.key === Actions.RENEW_JOB) {
             Modal.confirm({
                 title: 'Do you want to renew the job?',
@@ -243,9 +275,11 @@ function AnnotationMenuComponent(props: Props & RouteComponentProps): JSX.Elemen
                     <Text className={computeClassName(JobState.COMPLETED)}>{JobState.COMPLETED}</Text>
                 </Menu.Item>
             </Menu.SubMenu>
-            {[JobStage.ANNOTATION, JobStage.REVIEW].includes(jobStage) ?
+            {[JobStage.ANNOTATION].includes(jobStage) ?
+                <Menu.Item key={Actions.SUBMIT_FOR_REVIEW}>Submit for Review</Menu.Item> : null}
+            {[JobStage.REVIEW].includes(jobStage) ?
                 <Menu.Item key={Actions.FINISH_JOB}>Finish the job</Menu.Item> : null}
-            {jobStage === JobStage.ACCEPTANCE ?
+            {[JobStage.ACCEPTANCE, JobStage.REVIEW].includes(jobStage) ?
                 <Menu.Item key={Actions.RENEW_JOB}>Renew the job</Menu.Item> : null}
         </Menu>
     );

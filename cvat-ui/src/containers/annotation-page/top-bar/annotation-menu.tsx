@@ -1,4 +1,4 @@
-// Copyright (C) 2020-2021 Intel Corporation
+// Copyright (C) 2022 Intel Corporation
 //
 // SPDX-License-Identifier: MIT
 
@@ -125,6 +125,10 @@ function AnnotationMenuContainer(props: Props): JSX.Element {
             jobInstance.state = core.enums.JobState.COMPLETED;
             updateJob(jobInstance);
             history.push(`/tasks/${jobInstance.taskId}`);
+        } else if (action === Actions.SUBMIT_FOR_REVIEW) {
+            jobInstance.stage = JobStage.REVIEW;
+            updateJob(jobInstance);
+            window.location.reload();
         } else if (action === Actions.OPEN_TASK) {
             history.push(`/tasks/${jobInstance.taskId}`);
         } else if (action.startsWith('state:')) {

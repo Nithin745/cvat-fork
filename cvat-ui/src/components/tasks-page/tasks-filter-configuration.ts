@@ -57,9 +57,16 @@ export const config: Partial<Config> = {
         },
         camera: {
             label: 'Camera',
-            type: 'text',
+            type: 'select',
             valueSources: ['value'],
-            operators: ['equal'],
+            operators: ['select_equals'],
+            fieldSettings: {
+                listValues: [
+                    { value: 'camera5', title: 'Camera 5' },
+                    { value: 'camera6', title: 'Camera 6' },
+                    { value: 'camera7', title: 'Camera 7' },
+                ],
+            },
         },
     },
 };
@@ -70,8 +77,9 @@ export const predefinedFilterValues = {
     'Assigned to me': '{"and":[{"==":[{"var":"assignee"},"<username>"]}]}',
     'Owned by me': '{"and":[{"==":[{"var":"owner"},"<username>"]}]}',
     'Not completed': '{"!":{"and":[{"==":[{"var":"status"},"completed"]}]}}',
-    'Completed': '{"and":[{"==":[{"var":"status"},"completed"]}]}',
-    'Camera5': '{"and":[{"==":[{"var":"camera"},"camera5"]}]}',
-    'Camera6': '{"and":[{"==":[{"var":"camera"},"camera6"]}]}',
-    'Camera7': '{"and":[{"==":[{"var":"camera"},"camera7"]}]}',
+    Validation: '{"and":[{"==":[{"var":"status"},"validation"]}]}',
+    Completed: '{"and":[{"==":[{"var":"status"},"completed"]}]}',
+    Camera5: '{"and":[{"==":[{"var":"camera"},"camera5"]}]}',
+    Camera6: '{"and":[{"==":[{"var":"camera"},"camera6"]}]}',
+    Camera7: '{"and":[{"==":[{"var":"camera"},"camera7"]}]}',
 };

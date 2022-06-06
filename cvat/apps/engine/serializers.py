@@ -65,6 +65,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         if instance:
             attribute = super().to_representation(instance)
             attribute['values'] = attribute['values'].split('\n')[::-1]
+            attribute['default_value'] = attribute['values'][0]
         else:
             attribute = instance
 
@@ -180,14 +181,17 @@ class JobWriteSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         state = validated_data.get('state')
         stage = validated_data.get('stage')
-        status = validated_data.get('status')
         if stage:
             if stage == models.StageChoice.ANNOTATION:
                 status = models.StatusChoice.ANNOTATION
+            elif stage == models.StageChoice.ANNOTATION and state == models.StateChoice.REJECTED:
+                status = models.StatusChoice.ANNOTATION
             elif stage == models.StageChoice.ACCEPTANCE and state == models.StateChoice.COMPLETED:
                 status = models.StatusChoice.COMPLETED
-            else:
+            elif stage == models.StageChoice.VALIDATION:
                 status = models.StatusChoice.VALIDATION
+            elif stage == models.StageChoice.ANNOTATION and state == models.StateChoice.IN_PROGRESS:
+                status = models.StatusChoice.ANNOTATION
 
             validated_data['status'] = status
             if stage != instance.stage and not state:
