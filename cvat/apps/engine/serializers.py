@@ -64,8 +64,8 @@ class AttributeSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         if instance:
             attribute = super().to_representation(instance)
-            attribute['values'] = attribute['values'].split('\n')[::-1]
-            attribute['default_value'] = attribute['values'][0]
+            attribute['values'] = attribute['values'].split('\n')
+            attribute['default_value'] = attribute['values'][-1]
         else:
             attribute = instance
 
@@ -432,7 +432,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
     project_id = serializers.IntegerField(required=False, allow_null=True)
     dimension = serializers.CharField(allow_blank=True, required=False)
     path = serializers.ReadOnlyField(source='data.video.path')
-    camera_name = serializers.PrimaryKeyRelatedField(queryset=models.CameraName.objects.all(), required=False)
+    camera_name = serializers.PrimaryKeyRelatedField(queryset=models.CameraName.objects.all(), allow_null=True, partial=True)
 
     class Meta:
         model = models.Task
