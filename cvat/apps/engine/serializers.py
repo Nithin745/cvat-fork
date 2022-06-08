@@ -65,7 +65,6 @@ class AttributeSerializer(serializers.ModelSerializer):
         if instance:
             attribute = super().to_representation(instance)
             attribute['values'] = attribute['values'].split('\n')
-            attribute['default_value'] = attribute['values'][-1]
         else:
             attribute = instance
 
@@ -121,6 +120,7 @@ class LabelSerializer(serializers.ModelSerializer):
             db_label.color = validated_data.get('color', db_label.color)
         db_label.save()
         for attr in attributes:
+            attr['default_value'] = attr['values'][-1]
             (db_attr, created) = models.AttributeSpec.objects.get_or_create(
                 label=db_label, name=attr['name'], defaults=attr)
             if created:
@@ -432,7 +432,6 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
     project_id = serializers.IntegerField(required=False, allow_null=True)
     dimension = serializers.CharField(allow_blank=True, required=False)
     path = serializers.ReadOnlyField(source='data.video.path')
-    camera_name = serializers.PrimaryKeyRelatedField(queryset=models.CameraName.objects.all(), allow_null=True, required=True)
 
     class Meta:
         model = models.Task
@@ -444,7 +443,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
         read_only_fields = ('mode', 'created_date', 'updated_date', 'status',
             'data_chunk_size', 'owner', 'assignee', 'data_compressed_chunk_type',
             'data_original_chunk_type', 'size', 'image_quality', 'data',
-            'organization', 'path')
+            'organization', 'path', 'camera_name')
         write_once_fields = ('overlap', 'segment_size', 'project_id')
 
 
