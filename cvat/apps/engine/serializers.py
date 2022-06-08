@@ -120,7 +120,8 @@ class LabelSerializer(serializers.ModelSerializer):
             db_label.color = validated_data.get('color', db_label.color)
         db_label.save()
         for attr in attributes:
-            attr['default_value'] = attr['values'][-1]
+            if attr['values']:
+                attr['default_value'] = attr['values'][-1]
             (db_attr, created) = models.AttributeSpec.objects.get_or_create(
                 label=db_label, name=attr['name'], defaults=attr)
             if created:
