@@ -445,7 +445,7 @@ class TaskSerializer(WriteOnceMixin, serializers.ModelSerializer):
         read_only_fields = ('mode', 'created_date', 'updated_date', 'status',
             'data_chunk_size', 'owner', 'assignee', 'data_compressed_chunk_type',
             'data_original_chunk_type', 'size', 'image_quality', 'data',
-            'organization', 'path', 'camera_name')
+            'organization', 'path')
         write_once_fields = ('overlap', 'segment_size', 'project_id')
 
 
